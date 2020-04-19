@@ -16,17 +16,17 @@ class Order {
   ) {
     this.customer = customer;
     this.productSet = productSet;
-    this.number = number;
+    this.number = parseInt(number);
     this.date = date;
     this.status = status;
-    this.sum = sum;
+    this.sum = parseInt(sum);
     this.payingMethod = payingMethod;
     this.deliveryMethod = deliveryMethod;
     this.track = track;
     this.remark = remark;
     this.site = site;
     this.message = message;
-    this.realSum = realSum;
+    this.realSum = parseInt(realSum);
   }
 }
 class Customer {
@@ -47,7 +47,7 @@ class Customer {
 }
 class Product {
   constructor(nr, color, engraving) {
-    this.nr = nr;
+    this.nr = parseInt(nr);
     this.color = color;
     this.engraving = engraving;
   }
