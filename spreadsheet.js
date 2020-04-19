@@ -94,19 +94,6 @@ class Row {
     this.realSum = realSum;
   }
 }
-class Summary { 
-  constructor(orders) { 
-    this.orderCount
-    this.orderSum
-    this.averagePrice
-    this.sumToCheckOut
-    this.newCustomers
-    this.productsCount
-    this.deliveryMethod
-    this.payingMethod
-    this.regionCount
-  }
-}
 let rows = [];
 let products = [];
 
@@ -220,4 +207,6 @@ module.exports.ordersData = async function accesSpreadsheet(orders, customers) {
   rowSet(data);
   productSet();
   orderSet(orders, customers);
+  
+  
 };
