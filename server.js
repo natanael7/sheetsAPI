@@ -8,8 +8,8 @@ class Summary {
     this.newCustomers = this.countNewCustomers(orders);
     this.microProductsCount = this.countMicroProducts(orders);
     this.macroProductsCount = this.countMacroProducts();
-    this.deliveryMethod = this.countIndex(orders, "deliveryMethod");
-    this.payingMethod = this.countIndex(orders, "payingMethod");
+    this.deliveryMethodCount = this.countIndex(orders, "deliveryMethod");
+    this.payingMethodCount = this.countIndex(orders, "payingMethod");
     this.regionCount = this.countRegion(orders);
   }
   countIndex(arr, prop) {

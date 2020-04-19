@@ -30,14 +30,15 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, region, sat, postCode, adress) {
+  constructor(account, name, phone, region, sat, postCode, adress, id) {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.region = region,
+    this.region = region;
     this.sat = sat;
     this.postCode = postCode;
     this.adress = adress;
+    this.id = id;
   }
 }
 class Product {
@@ -81,9 +82,7 @@ class Row {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.region = region,
-    this.sat =sat,
-    this.postCode = postCode;
+    (this.region = region), (this.sat = sat), (this.postCode = postCode);
     this.adress = adress;
     this.sum = sum;
     this.payingMethod = payingMethod;
@@ -104,10 +103,9 @@ const creds = require("./client_secret.json");
 function preventCustomerDuplicate(customers, search) {
   for (let i = 0; i < customers.length; i++)
     if (customers[i].account == search.account)
-      return false
-  return true
+      return { status: false, actual: customers[i] };
+  return { status: true };
 }
-
 function rowSet(data) {
   for (let i = 0; i < data.length; i++) {
     let tempRow = new Row(
@@ -150,6 +148,8 @@ function orderSet(orders, customers) {
   });
   for (let i = 0; i < orderIndex.length; i++) {
     let row = rows[orderIndex[i]];
+    if (customers.length == 0) index = 1;
+    else index = customers[customers.length - 1].id + 1;
     let tempCustomer = new Customer(
       row.account,
       row.name,
@@ -157,8 +157,22 @@ function orderSet(orders, customers) {
       row.region,
       row.sat,
       row.postCode,
-      row.adress
+      row.adress,
+      index
     );
+    if (preventCustomerDuplicate(customers, tempCustomer).status) {
+      customers.push(tempCustomer);
+    } else
+      tempCustomer = new Customer(
+        preventCustomerDuplicate(customers, tempCustomer).actual.account,
+        preventCustomerDuplicate(customers, tempCustomer).actual.name,
+        preventCustomerDuplicate(customers, tempCustomer).actual.phone,
+        preventCustomerDuplicate(customers, tempCustomer).actual.region,
+        preventCustomerDuplicate(customers, tempCustomer).actual.sat,
+        preventCustomerDuplicate(customers, tempCustomer).actual.postCode,
+        preventCustomerDuplicate(customers, tempCustomer).actual.adress,
+        preventCustomerDuplicate(customers, tempCustomer).actual.id
+      );
     let tempOrder = new Order(
       tempCustomer,
       [],
@@ -185,8 +199,6 @@ function orderSet(orders, customers) {
       );
       tempOrder.productSet.push(tempProduct);
     }
-    if (preventCustomerDuplicate(customers, tempCustomer))
-      customers.push(tempCustomer);
     orders.push(tempOrder);
   }
 }
@@ -207,6 +219,4 @@ module.exports.ordersData = async function accesSpreadsheet(orders, customers) {
   rowSet(data);
   productSet();
   orderSet(orders, customers);
-  
-  
 };
