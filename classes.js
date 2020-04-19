@@ -1,4 +1,4 @@
-class Order {
+ class Order {
   constructor(
     customer,
     productSet,
@@ -29,12 +29,12 @@ class Order {
     this.realSum = realSum;
   }
 }
-class Customer {
-  constructor(account, name, phone, raion, sat, postCode, adress) {
+ class Customer {
+  constructor(account, name, phone, region, sat, postCode, adress) {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.raion = raion;
+    this.region = region;
     this.sat = sat;
     this.postCode = postCode;
     this.adress = adress;
@@ -59,7 +59,7 @@ class Row {
     account,
     name,
     phone,
-    raion,
+    region,
     sat,
     postCode,
     adress,
@@ -81,7 +81,7 @@ class Row {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.raion = raion;
+    this.region = region;
     this.sat = sat;
     this.postCode = postCode;
     this.adress = adress;

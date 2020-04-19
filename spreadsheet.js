@@ -30,11 +30,11 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, raion, sat, postCode, adress) {
+  constructor(account, name, phone, region, sat, postCode, adress) {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.raion = raion;
+    this.region = region,
     this.sat = sat;
     this.postCode = postCode;
     this.adress = adress;
@@ -59,7 +59,7 @@ class Row {
     account,
     name,
     phone,
-    raion,
+    region,
     sat,
     postCode,
     adress,
@@ -81,8 +81,8 @@ class Row {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    this.raion = raion;
-    this.sat = sat;
+    this.region = region,
+    this.sat =sat,
     this.postCode = postCode;
     this.adress = adress;
     this.sum = sum;
@@ -94,14 +94,32 @@ class Row {
     this.realSum = realSum;
   }
 }
-
-let a1 = [];
+class Summary { 
+  constructor(orders) { 
+    this.orderCount
+    this.orderSum
+    this.averagePrice
+    this.sumToCheckOut
+    this.newCustomers
+    this.productsCount
+    this.deliveryMethod
+    this.payingMethod
+    this.regionCount
+  }
+}
 let rows = [];
 let products = [];
 
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const { promisify } = require("util");
 const creds = require("./client_secret.json");
+
+function preventCustomerDuplicate(customers, search) {
+  for (let i = 0; i < customers.length; i++)
+    if (customers[i].account == search.account)
+      return false
+  return true
+}
 
 function rowSet(data) {
   for (let i = 0; i < data.length; i++) {
@@ -137,10 +155,11 @@ function productSet() {
     products.push(tempRow);
   });
 }
-function orderSet(orders) {
+function orderSet(orders, customers) {
   let orderIndex = [];
   rows.forEach((row) => {
-    if ((row.account != undefined)&&(row.account != undefined)) orderIndex.push(row.number - 1);
+    if (row.account != undefined && row.account != undefined)
+      orderIndex.push(row.number - 1);
   });
   for (let i = 0; i < orderIndex.length; i++) {
     let row = rows[orderIndex[i]];
@@ -148,7 +167,7 @@ function orderSet(orders) {
       row.account,
       row.name,
       row.phone,
-      row.raion,
+      row.region,
       row.sat,
       row.postCode,
       row.adress
@@ -179,11 +198,13 @@ function orderSet(orders) {
       );
       tempOrder.productSet.push(tempProduct);
     }
+    if (preventCustomerDuplicate(customers, tempCustomer))
+      customers.push(tempCustomer);
     orders.push(tempOrder);
   }
 }
 
-module.exports.ordersData = async function accesSpreadsheet(orders) {
+module.exports.ordersData = async function accesSpreadsheet(orders, customers) {
   const doc = new GoogleSpreadsheet(
     "1Qlmc-tfrvQ1sTO4UL2NZmVFlUbQII8qaTgQdpECjNf0"
   );
@@ -198,5 +219,5 @@ module.exports.ordersData = async function accesSpreadsheet(orders) {
 
   rowSet(data);
   productSet();
-  orderSet(orders)
-}
+  orderSet(orders, customers);
+};
