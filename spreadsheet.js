@@ -39,6 +39,7 @@ class Customer {
     this.postCode = postCode;
     this.adress = adress;
     this.id = id;
+    this.orders = []
   }
 }
 class Product {
@@ -91,6 +92,25 @@ class Row {
     this.site = site;
     this.message = message;
     this.realSum = realSum;
+  }
+}
+class Circular {
+  constructor(
+    order
+  ) {
+    this.customer = "[Circular]"
+    this.productSet = order.productSet;
+    this.number = order.number;
+    this.date = order.date;
+    this.status = order.status;
+    this.sum = order.sum;
+    this.payingMethod = order.payingMethod;
+    this.deliveryMethod = order.deliveryMethod;
+    this.track = order.track;
+    this.remark = order.remark;
+    this.site = order.site;
+    this.message = order.message;
+    this.realSum = order.realSum;
   }
 }
 let rows = [];
@@ -200,6 +220,8 @@ function orderSet(orders, customers) {
       tempOrder.productSet.push(tempProduct);
     }
     orders.push(tempOrder);
+    let circular = new Circular(tempOrder);
+    tempCustomer.orders.push(circular); 
   }
 }
 
