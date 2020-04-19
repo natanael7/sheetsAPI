@@ -30,7 +30,7 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, region, sat, postCode, adress, id) {
+  constructor(account, name, phone, region, sat, postCode, adress, id, orders) {
     this.account = account;
     this.name = name;
     this.phone = phone;
@@ -39,7 +39,10 @@ class Customer {
     this.postCode = postCode;
     this.adress = adress;
     this.id = id;
-    this.orders = []
+    if (orders != undefined)
+      this.orders = orders
+    else 
+      this.orders= []
   }
 }
 class Product {
@@ -191,7 +194,8 @@ function orderSet(orders, customers) {
         preventCustomerDuplicate(customers, tempCustomer).actual.sat,
         preventCustomerDuplicate(customers, tempCustomer).actual.postCode,
         preventCustomerDuplicate(customers, tempCustomer).actual.adress,
-        preventCustomerDuplicate(customers, tempCustomer).actual.id
+        preventCustomerDuplicate(customers, tempCustomer).actual.id,
+        preventCustomerDuplicate(customers, tempCustomer).actual.orders
       );
     let tempOrder = new Order(
       tempCustomer,
