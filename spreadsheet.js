@@ -129,6 +129,12 @@ function preventCustomerDuplicate(customers, search) {
       return { status: false, actual: customers[i] };
   return { status: true };
 }
+function preventOrderDuplicate(orders, search) {
+  for (let i = 0; i < orders.length; i++)
+    if (orders[i].number == search.number)
+      return false
+  return true
+}
 function rowSet(data) {
   for (let i = 0; i < data.length; i++) {
     let tempRow = new Row(
@@ -223,9 +229,11 @@ function orderSet(orders, customers) {
       );
       tempOrder.productSet.push(tempProduct);
     }
-    orders.push(tempOrder);
-    let circular = new Circular(tempOrder);
-    tempCustomer.orders.push(circular); 
+    if (preventOrderDuplicate(orders,tempOrder)){
+      orders.push(tempOrder);
+      let circular = new Circular(tempOrder);
+      tempCustomer.orders.push(circular);
+    }
   }
 }
 

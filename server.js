@@ -75,9 +75,12 @@ let orders = [];
 app.listen(3000, () => console.log("listening"));
 app.use(express.static("public"));
 app.get("/api", function (req, res) {
-  res.json("GET request to the homepage");
-  console.log("request");
-  res.end;
+  async function getdata(){
+    const ordersa = await spreadsheet.ordersData(orders, customers);
+    res.json(orders);
+    res.end;
+  }
+  getdata()
 });
 app.get("/order/:id", (req, res, next) => {
   async function getdata() {
