@@ -97,19 +97,8 @@ class Row {
 }
 class Circular {
   constructor(order) {
+    for (const property in order) this[property] = order[property];
     this.customer = "[Circular]";
-    this.productSet = order.productSet;
-    this.number = order.number;
-    this.date = order.date;
-    this.status = order.status;
-    this.sum = order.sum;
-    this.payingMethod = order.payingMethod;
-    this.deliveryMethod = order.deliveryMethod;
-    this.track = order.track;
-    this.remark = order.remark;
-    this.site = order.site;
-    this.message = order.message;
-    this.realSum = order.realSum;
   }
 }
 let rows = [];
