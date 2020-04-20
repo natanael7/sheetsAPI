@@ -30,12 +30,12 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, region, sat, postCode, adress, id, orders) {
+  constructor(account, name, phone, region, city, postCode, adress, id, orders) {
     this.account = account.toLowerCase();
     this.name = name.toLowerCase();
     this.phone = phone
     this.region = region.toLowerCase();
-    this.sat = sat.toLowerCase();
+    this.city = city.toLowerCase();
     this.postCode = postCode
     this.adress = adress.toLowerCase();
     this.id = id
@@ -63,7 +63,7 @@ class Row {
     name,
     phone,
     region,
-    sat,
+    city,
     postCode,
     adress,
     sum,
@@ -84,7 +84,7 @@ class Row {
     this.account = account;
     this.name = name;
     this.phone = phone;
-    (this.region = region), (this.sat = sat), (this.postCode = postCode);
+    (this.region = region), (this.city = city), (this.postCode = postCode);
     this.adress = adress;
     this.sum = sum;
     this.payingMethod = payingMethod;
@@ -178,7 +178,7 @@ function orderSet(orders, customers) {
       row.name,
       row.phone,
       row.region,
-      row.sat,
+      row.city,
       row.postCode,
       row.adress,
       index
@@ -191,7 +191,7 @@ function orderSet(orders, customers) {
         preventCustomerDuplicate(customers, tempCustomer).actual.name,
         preventCustomerDuplicate(customers, tempCustomer).actual.phone,
         preventCustomerDuplicate(customers, tempCustomer).actual.region,
-        preventCustomerDuplicate(customers, tempCustomer).actual.sat,
+        preventCustomerDuplicate(customers, tempCustomer).actual.city,
         preventCustomerDuplicate(customers, tempCustomer).actual.postCode,
         preventCustomerDuplicate(customers, tempCustomer).actual.adress,
         preventCustomerDuplicate(customers, tempCustomer).actual.id,
