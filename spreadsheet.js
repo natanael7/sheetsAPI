@@ -18,37 +18,35 @@ class Order {
     this.productSet = productSet;
     this.number = parseInt(number);
     this.date = date;
-    this.status = status;
+    this.status = parseInt(status);
     this.sum = parseInt(sum);
-    this.payingMethod = payingMethod;
-    this.deliveryMethod = deliveryMethod;
+    this.payingMethod = payingMethod.toLowerCase();
+    this.deliveryMethod = deliveryMethod.toLowerCase();
     this.track = track;
     this.remark = remark;
-    this.site = site;
+    this.site = site.toLowerCase();
     this.message = message;
     this.realSum = parseInt(realSum);
   }
 }
 class Customer {
   constructor(account, name, phone, region, sat, postCode, adress, id, orders) {
-    this.account = account;
-    this.name = name;
-    this.phone = phone;
-    this.region = region;
-    this.sat = sat;
-    this.postCode = postCode;
-    this.adress = adress;
-    this.id = id;
-    if (orders != undefined)
-      this.orders = orders
-    else 
-      this.orders= []
+    this.account = account.toLowerCase();
+    this.name = name.toLowerCase();
+    this.phone = phone
+    this.region = region.toLowerCase();
+    this.sat = sat.toLowerCase();
+    this.postCode = postCode
+    this.adress = adress.toLowerCase();
+    this.id = id
+    if (orders != undefined) this.orders = orders;
+    else this.orders = [];
   }
 }
 class Product {
   constructor(nr, color, engraving) {
     this.nr = parseInt(nr);
-    this.color = color;
+    this.color = color.toLowerCase();
     this.engraving = engraving;
   }
 }
@@ -98,10 +96,8 @@ class Row {
   }
 }
 class Circular {
-  constructor(
-    order
-  ) {
-    this.customer = "[Circular]"
+  constructor(order) {
+    this.customer = "[Circular]";
     this.productSet = order.productSet;
     this.number = order.number;
     this.date = order.date;
@@ -120,7 +116,6 @@ let rows = [];
 let products = [];
 
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { promisify } = require("util");
 const creds = require("./client_secret.json");
 
 function preventCustomerDuplicate(customers, search) {
@@ -131,9 +126,8 @@ function preventCustomerDuplicate(customers, search) {
 }
 function preventOrderDuplicate(orders, search) {
   for (let i = 0; i < orders.length; i++)
-    if (orders[i].number == search.number)
-      return false
-  return true
+    if (orders[i].number == search.number) return false;
+  return true;
 }
 function rowSet(data) {
   for (let i = 0; i < data.length; i++) {
@@ -203,6 +197,7 @@ function orderSet(orders, customers) {
         preventCustomerDuplicate(customers, tempCustomer).actual.id,
         preventCustomerDuplicate(customers, tempCustomer).actual.orders
       );
+    if (row.date == "") row.date = orders[orders.length - 1].date;
     let tempOrder = new Order(
       tempCustomer,
       [],
@@ -229,7 +224,7 @@ function orderSet(orders, customers) {
       );
       tempOrder.productSet.push(tempProduct);
     }
-    if (preventOrderDuplicate(orders,tempOrder)){
+    if (preventOrderDuplicate(orders, tempOrder)) {
       orders.push(tempOrder);
       let circular = new Circular(tempOrder);
       tempCustomer.orders.push(circular);
@@ -239,7 +234,7 @@ function orderSet(orders, customers) {
 
 module.exports.ordersData = async function accesSpreadsheet(orders, customers) {
   const doc = new GoogleSpreadsheet(
-    "1Qlmc-tfrvQ1sTO4UL2NZmVFlUbQII8qaTgQdpECjNf0"
+    "1Y372EhEV-6AQl70kiiBjsmfi-G5PTwWZLzMEZkjjK70"
   );
   await doc.useServiceAccountAuth({
     client_email: creds.client_email,
