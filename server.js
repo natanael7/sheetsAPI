@@ -46,10 +46,16 @@ class Summary {
   countMacroProducts() {
     let obj = {};
     obj.Piepteni = this.microProductsCount.piep;
+    if (isNaN(obj.Piepteni)) obj.Piepteni = 0;
     obj.Huse = this.microProductsCount.h;
+    if (isNaN(obj.Huse)) obj.Huse = 0;
     obj.Sanitare = this.microProductsCount.cles + this.microProductsCount.bet
+    if (isNaN(obj.Sanitare)) obj.Sanitare = 0;
     obj.Periute = this.products - obj.Huse - obj.Piepteni - obj.Sanitare;
-    if (isNaN(obj.Periute)) delete obj.Periute;
+    for (const property in obj) { 
+      if (!obj[property])
+        delete obj[property]
+    }
     return obj;
   }
   countMicroProducts(arr) {
