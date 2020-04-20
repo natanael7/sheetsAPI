@@ -72,13 +72,14 @@ class Product {
   }
 }
 class Row {
-  constructor(...args) {
+  constructor(data) {
     let props = json.header2rowSchema;
-    args.forEach((property, index) => {
-      this[props[index]["prop"]] = property;
+    props.forEach((property, index) => {
+      this[property["prop"]] = data[property['rowTitle']]
     });
   }
 }
+
 class Circular {
   constructor(order) {
     for (const property in order) this[property] = order[property];
@@ -105,29 +106,7 @@ function preventOrderDuplicate(orders, search) {
 }
 function rowSet(data) {
   for (let i = 0; i < data.length; i++) {
-    let tempRow = new Row(
-      data[i]["Data"],
-      data[i]["Etapa pâlniei"],
-      data[i]["Nr"],
-      data[i]["Produs"],
-      data[i]["Gravare"],
-      data[i]["Comanda"],
-      data[i]["Livrare"],
-      data[i]["Cont"],
-      data[i]["Nume"],
-      data[i]["Telefon"],
-      data[i]["Raion"],
-      data[i]["Sat"],
-      data[i]["Cod postal"],
-      data[i]["Adresa"],
-      data[i]["Suma"],
-      data[i]["Achitare"],
-      data[i]["Remarca"],
-      data[i]["Track"],
-      data[i]["Site"],
-      data[i]["Mesaj"],
-      data[i]["Suma de incasat"]
-    );
+    let tempRow = new Row(data[i]);
     rows.push(tempRow);
   }
 }
