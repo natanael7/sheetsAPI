@@ -7,11 +7,19 @@ class Order {
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
         tempProp = tempProp.toLowerCase();
-      else if (props[index]["type"] == "define") {
-        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
-        else tempProp = [];
-      }
       this[props[index]["prop"]] = tempProp;
+    });
+    props.forEach((prop, index) => {
+      if (
+        prop["type"] == "defineArray" &&
+        args[index] == undefined &&
+        this[prop["prop"]] == undefined
+      )
+        this[prop["prop"]] = [];
+    });
+    props.forEach((prop, index) => {
+      if (prop["type"] == "defineInt" && args[index] == undefined)
+        this[prop["prop"]] = 0;
     });
   }
 }
@@ -19,27 +27,24 @@ class Customer {
   constructor(...args) {
     let props = json.customerSchema;
     args.forEach((property, index) => {
-      if(index!=10){
-        let tempProp = property;
-        if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-        else if (props[index]["type"] == "text")
-          tempProp = tempProp.toLowerCase();
-        this[props[index]["prop"]] = tempProp;
-        console.log(props[index]["type"])
-      }
+      let tempProp = property;
+      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
+      else if (props[index]["type"] == "text")
+        tempProp = tempProp.toLowerCase();
+      this[props[index]["prop"]] = tempProp;
     });
-    props.forEach((prop, index) => { 
-      if (prop['type'] == "defineArray" && args[index]==undefined &&this[prop['prop']] == undefined)
-        this[prop['prop']] = []
-    })
-    // props.forEach((prop, index) => { 
-    //   if (prop['type'] == "defineInt" && args[index]==undefined)
-    //     this[prop['prop']] = 0
-    // })
-    if (args[9] != undefined) this.orders = args[9];
-    else this.orders = [];
-    if (args[10] != undefined) this.ltv = args[10];
-    else this.ltv = 0;
+    props.forEach((prop, index) => {
+      if (
+        prop["type"] == "defineArray" &&
+        args[index] == undefined &&
+        this[prop["prop"]] == undefined
+      )
+        this[prop["prop"]] = [];
+    });
+    props.forEach((prop, index) => {
+      if (prop["type"] == "defineInt" && args[index] == undefined)
+        this[prop["prop"]] = 0;
+    });
   }
 }
 class Product {
@@ -50,11 +55,19 @@ class Product {
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
         tempProp = tempProp.toLowerCase();
-      else if (props[index]["type"] == "define") {
-        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
-        else tempProp = [];
-      }
       this[props[index]["prop"]] = tempProp;
+    });
+    props.forEach((prop, index) => {
+      if (
+        prop["type"] == "defineArray" &&
+        args[index] == undefined &&
+        this[prop["prop"]] == undefined
+      )
+        this[prop["prop"]] = [];
+    });
+    props.forEach((prop, index) => {
+      if (prop["type"] == "defineInt" && args[index] == undefined)
+        this[prop["prop"]] = 0;
     });
   }
 }
@@ -66,11 +79,19 @@ class Row {
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
         tempProp = tempProp.toLowerCase();
-      else if (props[index]["type"] == "define") {
-        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
-        else tempProp = [];
-      }
       this[props[index]["prop"]] = tempProp;
+    });
+    props.forEach((prop, index) => {
+      if (
+        prop["type"] == "defineArray" &&
+        args[index] == undefined &&
+        this[prop["prop"]] == undefined
+      )
+        this[prop["prop"]] = [];
+    });
+    props.forEach((prop, index) => {
+      if (prop["type"] == "defineInt" && args[index] == undefined)
+        this[prop["prop"]] = 0;
     });
   }
 }
