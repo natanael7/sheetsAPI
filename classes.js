@@ -7,7 +7,7 @@ class Order {
       let tempProp = property;
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
+        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {
@@ -31,7 +31,7 @@ class Customer {
       let tempProp = property;
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
+        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {
@@ -55,7 +55,7 @@ class Product {
       let tempProp = property;
       if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
       else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
+        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {
