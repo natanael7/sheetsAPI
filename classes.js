@@ -130,6 +130,17 @@ class Summary {
     return total - doubled;
   }
   countMacroProducts() {
+    let categories = json.products;
+    let counter = {};
+    categories.forEach((category) => {
+      counter[category.macro] = 0;
+      category.micro.forEach((color) => {
+        if (isNaN(this.microProductsCount[color]))
+          this.microProductsCount[color] = 0;
+        counter[category.macro] += this.microProductsCount[color];
+      });
+    });
+
     let obj = {};
     obj.Piepteni = this.microProductsCount.piep;
     if (isNaN(obj.Piepteni)) obj.Piepteni = 0;
@@ -141,7 +152,7 @@ class Summary {
     for (const property in obj) {
       if (!obj[property]) delete obj[property];
     }
-    return obj;
+    return counter;
   }
   countMicroProducts(arr) {
     let obj = {};
