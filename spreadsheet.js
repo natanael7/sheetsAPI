@@ -30,7 +30,7 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, region, city, postCode, adress, id, orders, ltv) {
+  constructor(account, name, phone, region, city, postCode, adress, date, id, orders, ltv) {
     this.account = account.toLowerCase();
     this.name = name.toLowerCase();
     this.phone = phone
@@ -38,7 +38,8 @@ class Customer {
     this.city = city.toLowerCase();
     this.postCode = postCode
     this.adress = adress.toLowerCase();
-    this.id = id
+    this.date = date;
+    this.id = id;
     if (ltv != undefined) this.ltv = ltv;
     else this.ltv = 0;
     if (orders != undefined) this.orders = orders;
@@ -173,6 +174,7 @@ function orderSet(orders, customers) {
   });
   for (let i = 0; i < orderIndex.length; i++) {
     let row = rows[orderIndex[i]];
+    if (row.date == "") row.date = orders[orders.length - 1].date;
     if (customers.length == 0) index = 1;
     else index = customers[customers.length - 1].id + 1;
     let tempCustomer = new Customer(
@@ -183,6 +185,7 @@ function orderSet(orders, customers) {
       row.city,
       row.postCode,
       row.adress,
+      row.date,
       index
     );
     if (preventCustomerDuplicate(customers, tempCustomer).status) {
@@ -196,11 +199,11 @@ function orderSet(orders, customers) {
         preventCustomerDuplicate(customers, tempCustomer).actual.city,
         preventCustomerDuplicate(customers, tempCustomer).actual.postCode,
         preventCustomerDuplicate(customers, tempCustomer).actual.adress,
+        preventCustomerDuplicate(customers, tempCustomer).actual.date,
         preventCustomerDuplicate(customers, tempCustomer).actual.id,
         preventCustomerDuplicate(customers, tempCustomer).actual.orders,
         preventCustomerDuplicate(customers, tempCustomer).actual.ltv
       );
-    if (row.date == "") row.date = orders[orders.length - 1].date;
     let tempOrder = new Order(
       tempCustomer,
       [],

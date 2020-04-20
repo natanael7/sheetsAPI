@@ -1,11 +1,11 @@
 class Summary {
-  constructor(orders) {
+  constructor(orders, customers) {
     this.orderCount = orders.length;
     this.products = this.countProducts(orders);
     this.orderSum = this.sumIndex(orders, "sum");
     this.sumToCheckOut = this.sumIndex(orders, "realSum");
     this.averagePrice = Number((this.orderSum / this.orderCount).toFixed(2));
-    this.newCustomers = this.countNewCustomers(orders);
+    this.newCustomers = this.countNewCustomers(orders, customers);
     this.microProductsCount = this.countMicroProducts(orders);
     this.macroProductsCount = this.countMacroProducts();
     this.deliveryMethodCount = this.countIndex(orders, "deliveryMethod");
@@ -27,8 +27,21 @@ class Summary {
     });
     return s;
   }
-  countNewCustomers(arr) {
-    return 0;
+  countNewCustomers(orders, customers) {
+    let total = 0
+    let doubled = 0;
+    orders.forEach(order => { 
+      if (order.date == order.customer.date )
+        total++
+    })
+    customers.forEach(customer => { 
+      customer.orders.forEach(order=> {
+        if (order.date == customer.orders[0].date)
+          doubled++
+      })
+      doubled--
+    })
+    return total - doubled;
   }
   countMacroProducts() {
     let obj = {};
@@ -142,7 +155,7 @@ app.get("/interval/:from-:to", (req, res, next) => {
 app.get("/summary", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
-    let summ = new Summary(orders);
+    let summ = new Summary(orders, customers);
     res.json(summ);
   }
   getdata();
@@ -152,10 +165,13 @@ app.get("/summary/interval/:from-:to", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
     let ordersInDay = [];
+    let customersInDay = []
     for (let i = 0; i < orders.length; i++)
-      if (orders[i].date >= req.params.from && orders[i].date <= req.params.to)
+      if (orders[i].date >= req.params.from && orders[i].date <= req.params.to) {
+        customersInDay.push(orders[i].customer)
         ordersInDay.push(orders[i]);
-    let summ = new Summary(ordersInDay);
+      }
+    let summ = new Summary(ordersInDay, customersInDay);
     res.json(summ);
   }
   getdata();
