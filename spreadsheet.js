@@ -30,7 +30,7 @@ class Order {
   }
 }
 class Customer {
-  constructor(account, name, phone, region, city, postCode, adress, id, orders) {
+  constructor(account, name, phone, region, city, postCode, adress, id, orders, ltv) {
     this.account = account.toLowerCase();
     this.name = name.toLowerCase();
     this.phone = phone
@@ -39,6 +39,8 @@ class Customer {
     this.postCode = postCode
     this.adress = adress.toLowerCase();
     this.id = id
+    if (ltv != undefined) this.ltv = ltv;
+    else this.ltv = 0;
     if (orders != undefined) this.orders = orders;
     else this.orders = [];
   }
@@ -195,7 +197,8 @@ function orderSet(orders, customers) {
         preventCustomerDuplicate(customers, tempCustomer).actual.postCode,
         preventCustomerDuplicate(customers, tempCustomer).actual.adress,
         preventCustomerDuplicate(customers, tempCustomer).actual.id,
-        preventCustomerDuplicate(customers, tempCustomer).actual.orders
+        preventCustomerDuplicate(customers, tempCustomer).actual.orders,
+        preventCustomerDuplicate(customers, tempCustomer).actual.ltv
       );
     if (row.date == "") row.date = orders[orders.length - 1].date;
     let tempOrder = new Order(
@@ -228,6 +231,7 @@ function orderSet(orders, customers) {
       orders.push(tempOrder);
       let circular = new Circular(tempOrder);
       tempCustomer.orders.push(circular);
+      tempCustomer.ltv += tempOrder.sum;
     }
   }
 }

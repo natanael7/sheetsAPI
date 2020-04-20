@@ -102,6 +102,20 @@ app.get("/customer/:id", (req, res, next) => {
   getdata();
   res.end;
 });
+app.get("/customer/max/:prop", (req, res, next) => {
+  async function getdata() {
+    await spreadsheet.ordersData(orders, customers);
+    let max = { prop : customers[0][req.params.prop], index : 0}
+    for (let i = 0; i < customers.length; i++)
+      if (customers[i][req.params.prop] > max.prop) {
+        max.index = i
+        max.prop=customers[i][req.params.prop]
+      }
+    res.json(customers[max.index]);
+  }
+  getdata();
+  res.end;
+});
 app.get("/date/:date", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
