@@ -1,4 +1,4 @@
-let json = require("./params.json");
+const json = require("./params.json");
 class Order {
   constructor(...args) {
     let props = json.orderSchema;
@@ -73,25 +73,9 @@ class Product {
 }
 class Row {
   constructor(...args) {
-    let props = json.rowSchema;
+    let props = json.header2rowSchema;
     args.forEach((property, index) => {
-      let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
-      this[props[index]["prop"]] = tempProp;
-    });
-    props.forEach((prop, index) => {
-      if (
-        prop["type"] == "defineArray" &&
-        args[index] == undefined &&
-        this[prop["prop"]] == undefined
-      )
-        this[prop["prop"]] = [];
-    });
-    props.forEach((prop, index) => {
-      if (prop["type"] == "defineInt" && args[index] == undefined)
-        this[prop["prop"]] = 0;
+      this[props[index]["prop"]] = property;
     });
   }
 }
@@ -101,6 +85,7 @@ class Circular {
     this.customer = "[Circular]";
   }
 }
+
 let rows = [];
 let products = [];
 
