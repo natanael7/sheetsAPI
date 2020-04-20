@@ -1,4 +1,4 @@
- class Order {
+class Order {
   constructor(
     customer,
     productSet,
@@ -29,7 +29,7 @@
     this.realSum = realSum;
   }
 }
- class Customer {
+class Customer {
   constructor(account, name, phone, region, sat, postCode, adress) {
     this.account = account;
     this.name = name;

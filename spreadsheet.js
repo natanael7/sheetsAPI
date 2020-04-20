@@ -1,101 +1,77 @@
+let json = require("./params.json");
 class Order {
-  constructor(
-    customer,
-    productSet,
-    number,
-    date,
-    status,
-    sum,
-    deliveryMethod,
-    payingMethod,
-    track,
-    remark,
-    site,
-    message,
-    realSum
-  ) {
-    this.customer = customer;
-    this.productSet = productSet;
-    this.number = parseInt(number);
-    this.date = date;
-    this.status = parseInt(status);
-    this.sum = parseInt(sum);
-    this.payingMethod = payingMethod.toLowerCase();
-    this.deliveryMethod = deliveryMethod.toLowerCase();
-    this.track = track;
-    this.remark = remark;
-    this.site = site.toLowerCase();
-    this.message = message;
-    this.realSum = parseInt(realSum);
+  constructor(...args) {
+    let props = json.orderSchema;
+    args.forEach((property, index) => {
+      let tempProp = property;
+      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
+      else if (props[index]["type"] == "text")
+        tempProp = tempProp.toLowerCase();
+      else if (props[index]["type"] == "define") {
+        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
+        else tempProp = [];
+      }
+      this[props[index]["prop"]] = tempProp;
+    });
   }
 }
 class Customer {
-  constructor(account, name, phone, region, city, postCode, adress, date, id, orders, ltv) {
-    this.account = account.toLowerCase();
-    this.name = name.toLowerCase();
-    this.phone = phone
-    this.region = region.toLowerCase();
-    this.city = city.toLowerCase();
-    this.postCode = postCode
-    this.adress = adress.toLowerCase();
-    this.date = date;
-    this.id = id;
-    if (ltv != undefined) this.ltv = ltv;
-    else this.ltv = 0;
-    if (orders != undefined) this.orders = orders;
+  constructor(...args) {
+    let props = json.customerSchema;
+    args.forEach((property, index) => {
+      if(index!=10){
+        let tempProp = property;
+        if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
+        else if (props[index]["type"] == "text")
+          tempProp = tempProp.toLowerCase();
+        this[props[index]["prop"]] = tempProp;
+        console.log(props[index]["type"])
+      }
+    });
+    props.forEach((prop, index) => { 
+      if (prop['type'] == "defineArray" && args[index]==undefined &&this[prop['prop']] == undefined)
+        this[prop['prop']] = []
+    })
+    // props.forEach((prop, index) => { 
+    //   if (prop['type'] == "defineInt" && args[index]==undefined)
+    //     this[prop['prop']] = 0
+    // })
+    if (args[9] != undefined) this.orders = args[9];
     else this.orders = [];
+    if (args[10] != undefined) this.ltv = args[10];
+    else this.ltv = 0;
   }
 }
 class Product {
-  constructor(nr, color, engraving) {
-    this.nr = parseInt(nr);
-    this.color = color.toLowerCase();
-    this.engraving = engraving;
+  constructor(...args) {
+    let props = json.productSchema;
+    args.forEach((property, index) => {
+      let tempProp = property;
+      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
+      else if (props[index]["type"] == "text")
+        tempProp = tempProp.toLowerCase();
+      else if (props[index]["type"] == "define") {
+        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
+        else tempProp = [];
+      }
+      this[props[index]["prop"]] = tempProp;
+    });
   }
 }
 class Row {
-  constructor(
-    date,
-    status,
-    number,
-    color,
-    engraving,
-    orderNumber,
-    deliveryMethod,
-    account,
-    name,
-    phone,
-    region,
-    city,
-    postCode,
-    adress,
-    sum,
-    payingMethod,
-    remark,
-    track,
-    site,
-    message,
-    realSum
-  ) {
-    this.date = date;
-    this.status = status;
-    this.number = number;
-    this.color = color;
-    this.engraving = engraving;
-    this.orderNumber = orderNumber;
-    this.deliveryMethod = deliveryMethod;
-    this.account = account;
-    this.name = name;
-    this.phone = phone;
-    (this.region = region), (this.city = city), (this.postCode = postCode);
-    this.adress = adress;
-    this.sum = sum;
-    this.payingMethod = payingMethod;
-    this.remark = remark;
-    this.track = track;
-    this.site = site;
-    this.message = message;
-    this.realSum = realSum;
+  constructor(...args) {
+    let props = json.rowSchema;
+    args.forEach((property, index) => {
+      let tempProp = property;
+      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
+      else if (props[index]["type"] == "text")
+        tempProp = tempProp.toLowerCase();
+      else if (props[index]["type"] == "define") {
+        if (props[index]["prop"] != undefined) tempProp = props[index]["prop"];
+        else tempProp = [];
+      }
+      this[props[index]["prop"]] = tempProp;
+    });
   }
 }
 class Circular {
