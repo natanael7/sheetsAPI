@@ -1,0 +1,111 @@
+{
+  "orderSchema": [
+    { "prop": "customer" },
+    { "prop": "productSet" },
+    { "prop": "number", "type": "number" },
+    { "prop": "date" },
+    { "prop": "status", "type": "number" },
+    { "prop": "sum", "type": "number" },
+    { "prop": "deliveryMethod", "type": "text" },
+    { "prop": "payingMethod", "type": "text" },
+    { "prop": "track" },
+    { "prop": "remark" },
+    { "prop": "site", "type": "text" },
+    { "prop": "message" },
+    { "prop": "realSum", "type": "number" }
+  ],
+  "customerSchema": [
+    { "prop": "account", "type": "text" },
+    { "prop": "name", "type": "text" },
+    { "prop": "phone" },
+    { "prop": "region", "type": "text" },
+    { "prop": "city", "type": "text" },
+    { "prop": "postCode" },
+    { "prop": "adress", "type": "text" },
+    { "prop": "date" },
+    { "prop": "id" },
+    { "prop": "orders", "type": "defineArray" },
+    { "prop": "ltv", "type": "defineInt" }
+  ],
+  "productSchema": [
+    { "prop": "number", "type": "number" },
+    { "prop": "color", "type": "text" },
+    { "prop": "engraving" }
+  ],
+  "rowSchema": [
+    { "prop": "date" },
+    { "prop": "status" },
+    { "prop": "number" },
+    { "prop": "color" },
+    { "prop": "engraving" },
+    { "prop": "orderNumber" },
+    { "prop": "deliveryMethod" },
+    { "prop": "account" },
+    { "prop": "name" },
+    { "prop": "phone" },
+    { "prop": "region" },
+    { "prop": "city" },
+    { "prop": "postCode" },
+    { "prop": "adress" },
+    { "prop": "sum" },
+    { "prop": "payingMethod" },
+    { "prop": "remark" },
+    { "prop": "track" },
+    { "prop": "site" },
+    { "prop": "message" },
+    { "prop": "realSum" }
+  ],
+  "header2rowSchema": [
+    { "Data": "date" },
+    { "Etapa pâlniei": "status" },
+    { "Nr": "number" },
+    { "Produs": "color" },
+    { "Gravare": "engraving" },
+    { "Comanda": "orderNumber" },
+    { "Livrare": "deliveryMethod" },
+    { "Cont": "account" },
+    { "Nume": "name" },
+    { "Telefon": "phone" },
+    { "Raion": "region" },
+    { "Sat": "city" },
+    { "Cod postal": "postCode" },
+    { "Adresa": "adress" },
+    { "Suma": "sum" },
+    { "Achitare": "payingMethod" },
+    { "Remarca": "remark" },
+    { "Track": "track" },
+    { "Site": "site" },
+    { "Mesaj": "message" },
+    { "Suma de incasat": "realSum" }
+  ],
+  "products": [
+    {
+      "macro": "Periute",
+      "micro": [
+        "a",
+        "n",
+        "ba",
+        "v",
+        "albs",
+        "vio",
+        "ca",
+        "t",
+        "bc",
+        "cc",
+        "refurbished"
+      ]
+    },
+    {
+      "macro": "Piepteni",
+      "micro": ["piep"]
+    },
+    {
+      "macro": "Huse",
+      "micro": ["h"]
+    },
+    {
+      "macro": "Sanitare",
+      "micro": ["cles", "sap", "bet"]
+    }
+  ]
+}
