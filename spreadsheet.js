@@ -1,97 +1,10 @@
-const json = require("./params.json");
-class Order {
-  constructor(...args) {
-    let props = json.orderSchema;
-    args.forEach((property, index) => {
-      let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
-      this[props[index]["prop"]] = tempProp;
-    });
-    props.forEach((prop, index) => {
-      if (
-        prop["type"] == "defineArray" &&
-        args[index] == undefined &&
-        this[prop["prop"]] == undefined
-      )
-        this[prop["prop"]] = [];
-    });
-    props.forEach((prop, index) => {
-      if (prop["type"] == "defineInt" && args[index] == undefined)
-        this[prop["prop"]] = 0;
-    });
-  }
-}
-class Customer {
-  constructor(...args) {
-    let props = json.customerSchema;
-    args.forEach((property, index) => {
-      let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
-      this[props[index]["prop"]] = tempProp;
-    });
-    props.forEach((prop, index) => {
-      if (
-        prop["type"] == "defineArray" &&
-        args[index] == undefined &&
-        this[prop["prop"]] == undefined
-      )
-        this[prop["prop"]] = [];
-    });
-    props.forEach((prop, index) => {
-      if (prop["type"] == "defineInt" && args[index] == undefined)
-        this[prop["prop"]] = 0;
-    });
-  }
-}
-class Product {
-  constructor(...args) {
-    let props = json.productSchema;
-    args.forEach((property, index) => {
-      let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        tempProp = tempProp.toLowerCase();
-      this[props[index]["prop"]] = tempProp;
-    });
-    props.forEach((prop, index) => {
-      if (
-        prop["type"] == "defineArray" &&
-        args[index] == undefined &&
-        this[prop["prop"]] == undefined
-      )
-        this[prop["prop"]] = [];
-    });
-    props.forEach((prop, index) => {
-      if (prop["type"] == "defineInt" && args[index] == undefined)
-        this[prop["prop"]] = 0;
-    });
-  }
-}
-class Row {
-  constructor(data) {
-    let props = json.header2rowSchema;
-    props.forEach((property, index) => {
-      this[property["prop"]] = data[property['rowTitle']]
-    });
-  }
-}
-
-class Circular {
-  constructor(order) {
-    for (const property in order) this[property] = order[property];
-    this.customer = "[Circular]";
-  }
-}
+const { GoogleSpreadsheet } = require("google-spreadsheet");
+const {Order, Customer, Product, Row, Circular} = require('./classes.js') 
+const creds = require("./client_secret.json");
 
 let rows = [];
 let products = [];
 
-const { GoogleSpreadsheet } = require("google-spreadsheet");
-const creds = require("./client_secret.json");
 
 function preventCustomerDuplicate(customers, search) {
   for (let i = 0; i < customers.length; i++)
