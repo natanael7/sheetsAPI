@@ -5,7 +5,14 @@ const { Summary } = require("./classes.js");
 
 let customers = [];
 let orders = [];
-
+function date2days(date) {
+  let arr = date.split(".");
+  let s = 0;
+  s += parseInt(arr[0]);
+  s += parseInt(arr[1]) * 31;
+  s += parseInt(arr[2]) * 365;
+  return s;
+}
 async function getData() {
   await spreadsheet.ordersData(orders, customers);
   console.log("data grabbed");
@@ -16,47 +23,126 @@ app.listen(3000, () => console.log("listening"));
 app.use(express.static("./public"));
 app.use(express.json());
 
-app.get("/order/:id", (req, res, next) => {
+//SHOW
+//Order
+app.get("/show/order/:id", (req, res, next) => {
   res.json(orders[req.params.id - 1]);
   res.end;
 });
-app.get("/customer/:id", (req, res, next) => {
+app.get("/show/order/interval/:from-:to", (req, res, next) => {
+  function validate(order) {
+    return (
+      date2days(order.date) >= date2days(req.params.from) &&
+      date2days(order.date) <= date2days(req.params.to)
+    );
+  }
+  const result = orders.filter((order) => validate(order));
+  res.json(result);
+  res.end;
+});
+
+//Customer
+app.get("/show/customer/:id", (req, res, next) => {
   res.json(customers[req.params.id - 1]);
   res.end;
 });
-app.get("/date/:date", (req, res, next) => {
+app.get("/show/customers/interval/:from-:to", (req, res, next) => {
   function validate(order) {
-    return order.date == req.params.date;
+    return (
+      date2days(order.date) >= date2days(req.params.from) &&
+      date2days(order.date) <= date2days(req.params.to)
+    );
   }
-  res.json(orders.filter((order) => validate(order)));
-  res.end;
-});
-app.get("/interval/:from-:to", (req, res, next) => {
-  function validate(order) {
-    return order.date >= req.params.from && order.date <= req.params.to;
-  }
-  res.json(orders.filter((order) => validate(order)));
-  res.end;
-});
-app.get("/summary", (req, res, next) => {
-  let summ = new Summary(orders, customers);
-  res.json(summ);
-  res.end;
-});
-app.get("/summary/:from-:to", (req, res, next) => {
-  function validate(order) {
-    return order.date >= req.params.from && order.date <= req.params.to;
-  }
-  let customersInDay = []
+  let customersInDay = [];
   const ordersInDay = orders.filter((order) => validate(order));
-  ordersInDay.forEach(order => { 
-    customersInDay.push(order.customer)
-  })
+  ordersInDay.forEach((order) => {
+    customersInDay.push(order.customer);
+  });
+  res.json(customersInDay);
+  res.end;
+});
+
+//Summary
+app.get("/show/summary", (req, res, next) => {
+  let summ = new Summary(orders, customers);
+  res.send(summ);
+  res.end;
+});
+app.get("/show/summary/interval/:from-:to", (req, res, next) => {
+  function validate(order) {
+    return (
+      date2days(order.date) >= date2days(req.params.from) &&
+      date2days(order.date) <= date2days(req.params.to)
+    );
+  }
+  let customersInDay = [];
+  const ordersInDay = orders.filter((order) => validate(order));
+  ordersInDay.forEach((order) => {
+    customersInDay.push(order.customer);
+  });
   let summ = new Summary(ordersInDay, customersInDay);
   res.json(summ);
   res.end;
 });
 
+//Filter
+app.post("/filter", (req, res) => {
+  function validate(order) {
+    for (const property in filters)
+      if (order[property] != filters[property]) return false;
+    return true;
+  }
+
+  let filters = req.body;
+  let header = { show: req.body.show, filterBy: req.body.filterBy };
+  delete filters.show;
+  delete filters.filterBy;
+  for (const property in filters)
+    console.log(`${property}: ${filters[property]}`);
+
+  let result = undefined;
+
+  switch (header.filterBy) {
+    case "order":
+      result = orders.filter((order) => validate(order));
+      break;
+    case "customer":
+      result = orders.filter((order) => validate(order["customer"]));
+      break;
+    case "productSet":
+      result = orders.filter((order) => validate(order["productSet"]));
+      break;
+    default:
+      res.end();
+  }
+  switch (header.show) {
+    case "order":
+      res.send(result);
+      break;
+    case "customer":
+      let resultCustomers = [];
+      result.forEach((order) => {
+        resultCustomers.push(order['customer']);
+      });
+      res.send(resultCustomers);
+      break;
+    case "summary":
+      let thisCustomers = [];
+      result.forEach((order) => {
+        thisCustomers.push(order.customer);
+      });
+      let summ = new Summary(result, thisCustomers);
+      console.log(summ);
+      res.send(summ);
+      break;
+    default:
+      res.end();
+  }
+
+  res.end;
+});
+
+//EXPERIMENTAL
 app.get("/customer/max/:prop", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
@@ -138,6 +224,4 @@ app.get("/ordersByMonth", (req, res, next) => {
   getdata();
   res.end;
 });
-app.post("/filter", function (request, response) {
-  response.send(request.body); // echo the result back
-});
+

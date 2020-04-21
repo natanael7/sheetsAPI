@@ -34,9 +34,14 @@ class Customer {
     let props = json.customerSchema;
     args.forEach((property, index) => {
       let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+      switch (props[index]["type"]) {
+        case "number":
+          tempProp = parseInt(tempProp);
+          break;
+        case "text":
+          if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+          break;
+      }
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {
@@ -58,9 +63,14 @@ class Product {
     let props = json.productSchema;
     args.forEach((property, index) => {
       let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+      switch (props[index]["type"]) {
+        case "number":
+          tempProp = parseInt(tempProp);
+          break;
+        case "text":
+          if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+          break;
+      }
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {

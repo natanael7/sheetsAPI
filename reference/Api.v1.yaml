@@ -2,129 +2,539 @@ openapi: 3.0.0
 info:
   title: Api
   version: '1.0'
-  license:
-    name: MIT
-  description: ''
 servers:
   - url: 'http://localhost:3000'
 paths:
-  '/order/:id':
+  '/show/customer/{id}':
     get:
-      summary: Get an order by itsid
+      summary: Your GET endpoint
       tags: []
-      responses: {}
-      operationId: get-order-orderId
-    parameters: []
-  '/customer/:id':
+      operationId: get-customer
+      description: ''
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+        description: ''
+  '/show/order/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
     get:
-      summary: Get an customer by its id
+      summary: Your GET endpoint
       tags: []
       responses:
         '200':
           description: OK
-          headers: {}
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  account:
-                    type: string
-                  name:
-                    type: string
-                  phone:
-                    type: string
-                  region:
-                    type: string
-                  city:
-                    type: string
-                  postCode:
-                    type: string
-                  adress:
-                    type: string
-                  date:
-                    type: string
-                  id:
-                    type: number
-                  orders:
+                  customer:
+                    type: object
+                    properties:
+                      account:
+                        type: string
+                      name:
+                        type: string
+                      phone:
+                        type: string
+                      city:
+                        type: string
+                      postCode:
+                        type: string
+                      adress:
+                        type: string
+                      date:
+                        type: string
+                      id:
+                        type: integer
+                      orders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            productSet:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  number:
+                                    type: integer
+                                  color:
+                                    type: string
+                                  engraving:
+                                    type: string
+                            number:
+                              type: integer
+                            date:
+                              type: string
+                            status:
+                              type: integer
+                            sum:
+                              type: integer
+                            deliveryMethod:
+                              type: string
+                            payingMethid:
+                              type: string
+                            track:
+                              type: string
+                            remark:
+                              type: string
+                            site:
+                              type: string
+                            message:
+                              type: string
+                            realSum:
+                              type: integer
+                      ltv:
+                        type: integer
+                  productSet:
                     type: array
                     items:
                       type: object
                       properties:
-                        productSet:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              number:
-                                type: integer
-                              color:
-                                type: string
-                              engraving:
-                                type: string
                         number:
-                          type: number
-                        date:
-                          type: string
-                        status:
-                          type: number
-                        sum:
-                          type: number
-                        deliveryMethod:
-                          type: string
-                        payingMethod:
-                          type: string
-                        track:
-                          type: string
-                        remark:
-                          type: string
-                        site:
-                          type: string
-                        message:
-                          type: string
-                        realSum:
                           type: integer
-                  ltv:
+                        color:
+                          type: string
+                        engraving:
+                          type: string
+                  number:
+                    type: number
+                  date:
+                    type: string
+                  status:
                     type: integer
-              examples: {}
-      operationId: get-customer-id
+                  sum:
+                    type: integer
+                  deliveryMethod:
+                    type: string
+                  payingMethod:
+                    type: string
+                  track:
+                    type: string
+                  remark:
+                    type: string
+                  site:
+                    type: string
+                  message:
+                    type: string
+                  realSum:
+                    type: integer
+              examples:
+                example-1:
+                  value:
+                    customer:
+                      account: cristinaghiletchi
+                      name: cristina munteanu
+                      phone: '79941687'
+                      region: chisinau
+                      city: telecentru
+                      postCode: '2011'
+                      adress: valea apelor 23
+                      date: 02.09.2019
+                      id: 5
+                      orders:
+                        - productSet:
+                            - number: 10
+                              color: ba
+                              engraving: Cristina
+                            - number: 11
+                              color: ba
+                              engraving: Dumitru
+                            - number: 12
+                              color: cc
+                              engraving: Robert
+                          number: 5
+                          date: 02.09.2019
+                          status: 9
+                          sum: 267
+                          deliveryMethod: posta
+                          payingMethod: cash
+                          track: '-'
+                          remark: '-'
+                          site: '-'
+                          message: '-'
+                          realSum: 253
+                      ltv: 267
+                    productSet:
+                      - number: 10
+                        color: ba
+                        engraving: Cristina
+                      - number: 11
+                        color: ba
+                        engraving: Dumitru
+                      - number: 12
+                        color: cc
+                        engraving: Robert
+                    number: 5
+                    date: 02.09.2019
+                    status: 9
+                    sum: 267
+                    deliveryMethod: posta
+                    payingMethod: cash
+                    track: '-'
+                    remark: '-'
+                    site: '-'
+                    message: '-'
+                    realSum: 253
+      operationId: get-order-id
+  /show/summary:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderCount:
+                    type: integer
+                  products:
+                    type: integer
+                  orderSum:
+                    type: integer
+                  sumToCheckOut:
+                    type: integer
+                  averagePrice:
+                    type: integer
+                  newCustomers:
+                    type: integer
+                  microProductsCount:
+                    type: object
+                    properties:
+                      ba:
+                        type: integer
+                      h:
+                        type: integer
+                      'n':
+                        type: integer
+                      v:
+                        type: integer
+                      cc:
+                        type: integer
+                      bc:
+                        type: integer
+                      ca:
+                        type: integer
+                      a:
+                        type: integer
+                      albs:
+                        type: integer
+                      vio:
+                        type: integer
+                      t:
+                        type: integer
+                      piep:
+                        type: integer
+                      bet:
+                        type: integer
+                      refurbished:
+                        type: integer
+                      cles:
+                        type: integer
+                      sap:
+                        type: integer
+                  macroProductsCount:
+                    type: object
+                    properties:
+                      Periute:
+                        type: integer
+                      Piepteni:
+                        type: integer
+                      Huse:
+                        type: integer
+                      Sanitare:
+                        type: integer
+                  deliveryMethodCount:
+                    type: object
+                    properties:
+                      curier:
+                        type: integer
+                      posta:
+                        type: integer
+                      rutiera:
+                        type: integer
+                      pick-up:
+                        type: integer
+                  payingMethodCount:
+                    type: object
+                    properties:
+                      cash:
+                        type: integer
+                      card:
+                        type: integer
+                  regionCount:
+                    type: object
+                    properties:
+                      chisinau:
+                        type: integer
+                      orhei:
+                        type: integer
+                      ungheni:
+                        type: integer
+                      briceni:
+                        type: integer
+                      hincesti:
+                        type: integer
+                      balti:
+                        type: integer
+                      nisporeni:
+                        type: integer
+                      comrat:
+                        type: integer
+                      floresti:
+                        type: integer
+                      riscani:
+                        type: integer
+                      cimislia:
+                        type: integer
+                      causeni:
+                        type: integer
+                      edinet:
+                        type: integer
+                      straseni:
+                        type: integer
+                      ialoveni:
+                        type: integer
+                      falesti:
+                        type: integer
+                      cantemir:
+                        type: integer
+                      cahul:
+                        type: integer
+                      transnistria:
+                        type: integer
+                      singerei:
+                        type: integer
+                      anenii noi:
+                        type: integer
+                      calarasi:
+                        type: integer
+                      rezina:
+                        type: integer
+                      donduseni:
+                        type: integer
+                      leova:
+                        type: integer
+                      drochia:
+                        type: integer
+                      soroca:
+                        type: integer
+                      glodeni:
+                        type: integer
+                      gagauzia:
+                        type: integer
+                      stefan voda:
+                        type: integer
+                      telenesti:
+                        type: integer
+                      criuleni:
+                        type: integer
+                  chisinauCount:
+                    type: object
+                    properties:
+                      botanica:
+                        type: integer
+                      ciocana:
+                        type: integer
+                      telecentru:
+                        type: integer
+                      riscani:
+                        type: integer
+                      centru:
+                        type: integer
+                      buiucani:
+                        type: integer
+              examples:
+                example-1:
+                  value:
+                    orderCount: 668
+                    products: 1522
+                    orderSum: 158657
+                    sumToCheckOut: 155885
+                    averagePrice: 237.51
+                    newCustomers: 596
+                    microProductsCount:
+                      ba: 167
+                      h: 82
+                      'n': 401
+                      v: 168
+                      cc: 118
+                      bc: 21
+                      ca: 87
+                      a: 193
+                      albs: 80
+                      vio: 118
+                      t: 32
+                      piep: 32
+                      bet: 2
+                      refurbished: 20
+                      cles: 1
+                      sap: 0
+                    macroProductsCount:
+                      Periute: 1405
+                      Piepteni: 32
+                      Huse: 82
+                      Sanitare: 3
+                    deliveryMethodCount:
+                      curier: 443
+                      posta: 213
+                      rutiera: 8
+                      pick-up: 4
+                    payingMethodCount:
+                      cash: 665
+                      card: 3
+                    regionCount:
+                      chisinau: 466
+                      orhei: 16
+                      ungheni: 25
+                      briceni: 8
+                      hincesti: 9
+                      balti: 19
+                      nisporeni: 6
+                      comrat: 2
+                      floresti: 3
+                      riscani: 7
+                      cimislia: 3
+                      causeni: 5
+                      edinet: 7
+                      straseni: 4
+                      ialoveni: 7
+                      falesti: 8
+                      cantemir: 6
+                      cahul: 20
+                      transnistria: 2
+                      singerei: 4
+                      anenii noi: 5
+                      calarasi: 3
+                      rezina: 3
+                      donduseni: 2
+                      leova: 2
+                      drochia: 4
+                      soroca: 7
+                      glodeni: 3
+                      gagauzia: 1
+                      stefan voda: 4
+                      telenesti: 3
+                      criuleni: 2
+                      dubasari: 2
+                    chisinauCount:
+                      botanica: 134
+                      ciocana: 59
+                      telecentru: 29
+                      riscani: 58
+                      centru: 115
+                      buiucani: 71
+      operationId: get-summary
+      parameters: []
+    parameters: []
+  '/show/order/interval/{from}-{to}':
+    parameters:
+      - schema:
+          type: string
+        name: from
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: to
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-show-order-from---to
+  '/show/customer/interval/{from}-{to}':
+    parameters:
+      - schema:
+          type: string
+        name: from
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: to
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-show-customer-interval-from---to
+  '/show/summary/interval/{from}-{to}':
+    parameters:
+      - schema:
+          type: string
+        name: from
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: to
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '':
+          description: ''
+      operationId: get-show-summary-interval-from---to
+  /filter:
+    post:
+      summary: filter data
+      tags: []
+      responses: {}
+      operationId: post-filter
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                id:
-                  type: integer
-            examples:
-              example:
-                value: 1
-    parameters: []
-  '/date/:date':
-    get:
-      summary: Get all the orders from a day by the date
-      tags: []
-      responses: {}
-      operationId: 'get-date-:date'
-  '/interval/:from-:to':
-    get:
-      summary: Get all the orders from a specific interval of time by passing the start an the end of the interval as dates
-      tags: []
-      responses: {}
-      operationId: 'get-interval-:from-:to'
-  /summary:
-    get:
-      summary: Gets the summary of all the orders
-      tags: []
-      responses: {}
-      operationId: get-summary
-  '/summary/:from-:to':
-    get:
-      summary: Gets the summary of all the orders of a specific interval of time by passing the strat and the end of an tinterval
-      tags: []
-      responses: {}
-      operationId: 'get-summary-:from-:to'
-      description: ''
+                show:
+                  oneOf:
+                    - default: order
+                      enum:
+                        - order
+                    - default: customer
+                      enum:
+                        - customer
+                    - default: summary
+                      enum:
+                        - summary
+                  type: string
+                filterBy:
+                  oneOf:
+                    - default: order
+                      enum:
+                        - order
+                    - default: customer
+                      enum:
+                        - customer
+                    - default: productSet
+                      enum:
+                        - productSet
+                  type: string
+                '':
+                  type: string
+              required:
+                - show
+                - filterBy
+        description: ''
 components:
   schemas: {}
-  securitySchemes: {}
