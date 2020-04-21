@@ -99,6 +99,7 @@ class Summary {
     this.deliveryMethodCount = this.countIndex(orders, "deliveryMethod");
     this.payingMethodCount = this.countIndex(orders, "payingMethod");
     this.regionCount = this.countRegion(orders);
+    this.chisinauCount = this.countChisinau(orders);
   }
   countIndex(arr, prop) {
     let obj = {};
@@ -173,6 +174,17 @@ class Summary {
       if (obj[el["customer"]["region"]] == undefined)
         obj[el["customer"]["region"]] = 1;
       else obj[el["customer"]["region"]]++;
+    });
+    return obj;
+  }
+  countChisinau(arr) {
+    let obj = {};
+    arr.forEach((el) => {
+      if (el["customer"]["region"]=="chisinau") {
+        if (obj[el["customer"]["city"]] == undefined)
+          obj[el["customer"]["city"]] = 1;
+        else obj[el["customer"]["city"]]++;
+      }
     });
     return obj;
   }
