@@ -5,9 +5,14 @@ class Order {
     let props = json.orderSchema;
     args.forEach((property, index) => {
       let tempProp = property;
-      if (props[index]["type"] == "number") tempProp = parseInt(tempProp);
-      else if (props[index]["type"] == "text")
-        if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+      switch (props[index]["type"]) {
+        case "number":
+          tempProp = parseInt(tempProp);
+          break;
+        case "text":
+          if (tempProp != undefined) tempProp = tempProp.toLowerCase();
+          break;
+      }
       this[props[index]["prop"]] = tempProp;
     });
     props.forEach((prop, index) => {
@@ -180,7 +185,7 @@ class Summary {
   countChisinau(arr) {
     let obj = {};
     arr.forEach((el) => {
-      if (el["customer"]["region"]=="chisinau") {
+      if (el["customer"]["region"] == "chisinau") {
         if (obj[el["customer"]["city"]] == undefined)
           obj[el["customer"]["city"]] = 1;
         else obj[el["customer"]["city"]]++;

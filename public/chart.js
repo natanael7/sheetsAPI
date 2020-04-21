@@ -23,7 +23,7 @@ async function chartIt() {
         {
           fill: false,
           label: "Sum of orders by day",
-          data: chartData.sum,
+          data: chartData.average,
           borderColor: "rgba(2, 99, 132, 1)",
           borderWidth: 1,
         }
@@ -32,7 +32,7 @@ async function chartIt() {
   });
 }
 async function getData() {
-  const response = await fetch("/ordersByDay");
+  const response = await fetch("/ordersByMonth");
   await response.json().then((data) => {
     data.forEach((element) => {
       for (const property in element) {

@@ -21,7 +21,7 @@ app.get("/order/:id", (req, res, next) => {
   res.end;
 });
 app.get("/customer/:id", (req, res, next) => {
-  res.json([req.params.id - 1]);
+  res.json(customers[req.params.id - 1]);
   res.end;
 });
 app.get("/date/:date", (req, res, next) => {
