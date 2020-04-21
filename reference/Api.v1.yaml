@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: Api
+  version: '1.0'
+  license:
+    name: MIT
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/order/:id':
+    get:
+      summary: Get an order by itsid
+      tags: []
+      responses: {}
+      operationId: get-order-orderId
+    parameters: []
+  '/customer/:id':
+    get:
+      summary: Get an customer by its id
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  region:
+                    type: string
+                  city:
+                    type: string
+                  postCode:
+                    type: string
+                  adress:
+                    type: string
+                  date:
+                    type: string
+                  id:
+                    type: number
+                  orders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productSet:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              number:
+                                type: integer
+                              color:
+                                type: string
+                              engraving:
+                                type: string
+                        number:
+                          type: number
+                        date:
+                          type: string
+                        status:
+                          type: number
+                        sum:
+                          type: number
+                        deliveryMethod:
+                          type: string
+                        payingMethod:
+                          type: string
+                        track:
+                          type: string
+                        remark:
+                          type: string
+                        site:
+                          type: string
+                        message:
+                          type: string
+                        realSum:
+                          type: integer
+                  ltv:
+                    type: integer
+              examples: {}
+      operationId: get-customer-id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+            examples:
+              example:
+                value: 1
+    parameters: []
+  '/date/:date':
+    get:
+      summary: Get all the orders from a day by the date
+      tags: []
+      responses: {}
+      operationId: 'get-date-:date'
+  '/interval/:from-:to':
+    get:
+      summary: Get all the orders from a specific interval of time by passing the start an the end of the interval as dates
+      tags: []
+      responses: {}
+      operationId: 'get-interval-:from-:to'
+  /summary:
+    get:
+      summary: Gets the summary of all the orders
+      tags: []
+      responses: {}
+      operationId: get-summary
+  '/summary/:from-:to':
+    get:
+      summary: Gets the summary of all the orders of a specific interval of time by passing the strat and the end of an tinterval
+      tags: []
+      responses: {}
+      operationId: 'get-summary-:from-:to'
+      description: ''
+components:
+  schemas: {}
+  securitySchemes: {}

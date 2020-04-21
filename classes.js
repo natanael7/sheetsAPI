@@ -83,7 +83,7 @@ class Row {
 class Circular {
   constructor(order) {
     for (const property in order) this[property] = order[property];
-    this.customer = "[Circular]";
+    this.customer = undefined;
   }
 }
 class Summary {

@@ -6,25 +6,57 @@ const { Summary } = require("./classes.js");
 let customers = [];
 let orders = [];
 
+async function getData() {
+  await spreadsheet.ordersData(orders, customers);
+  console.log("data grabbed");
+}
+
+getData();
 app.listen(3000, () => console.log("listening"));
 app.use(express.static("./public"));
+app.use(express.json());
 
 app.get("/order/:id", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    res.json(orders[req.params.id - 1]);
-  }
-  getdata();
+  res.json(orders[req.params.id - 1]);
   res.end;
 });
 app.get("/customer/:id", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    res.json(customers[req.params.id - 1]);
-  }
-  getdata();
+  res.json([req.params.id - 1]);
   res.end;
 });
+app.get("/date/:date", (req, res, next) => {
+  function validate(order) {
+    return order.date == req.params.date;
+  }
+  res.json(orders.filter((order) => validate(order)));
+  res.end;
+});
+app.get("/interval/:from-:to", (req, res, next) => {
+  function validate(order) {
+    return order.date >= req.params.from && order.date <= req.params.to;
+  }
+  res.json(orders.filter((order) => validate(order)));
+  res.end;
+});
+app.get("/summary", (req, res, next) => {
+  let summ = new Summary(orders, customers);
+  res.json(summ);
+  res.end;
+});
+app.get("/summary/:from-:to", (req, res, next) => {
+  function validate(order) {
+    return order.date >= req.params.from && order.date <= req.params.to;
+  }
+  let customersInDay = []
+  const ordersInDay = orders.filter((order) => validate(order));
+  ordersInDay.forEach(order => { 
+    customersInDay.push(order.customer)
+  })
+  let summ = new Summary(ordersInDay, customersInDay);
+  res.json(summ);
+  res.end;
+});
+
 app.get("/customer/max/:prop", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
@@ -39,80 +71,6 @@ app.get("/customer/max/:prop", (req, res, next) => {
   getdata();
   res.end;
 });
-app.get("/date/:date", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    let ordersInDay = [];
-    for (let i = 0; i < orders.length; i++)
-      if (orders[i].date == req.params.date) ordersInDay.push(orders[i]);
-    res.json(ordersInDay);
-  }
-  getdata();
-  res.end;
-});
-app.get("/interval/:from-:to", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    let ordersInDay = [];
-    for (let i = 0; i < orders.length; i++)
-      if (orders[i].date >= req.params.from && orders[i].date <= req.params.to)
-        ordersInDay.push(orders[i]);
-    res.json(ordersInDay);
-  }
-  getdata();
-  res.end;
-});
-app.get("/summary", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    let summ = new Summary(orders, customers);
-    res.json(summ);
-  }
-  getdata();
-  res.end;
-});
-app.get("/summary/interval/:from-:to", (req, res, next) => {
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    let ordersInDay = [];
-    let customersInDay = [];
-    for (let i = 0; i < orders.length; i++)
-      if (
-        orders[i].date >= req.params.from &&
-        orders[i].date <= req.params.to
-      ) {
-        customersInDay.push(orders[i].customer);
-        ordersInDay.push(orders[i]);
-      }
-    let summ = new Summary(ordersInDay, customersInDay);
-    res.json(summ);
-  }
-  getdata();
-  res.end;
-});
-app.get("/filter/*", (req, res, next) => {
-  function check(arr, order) {
-    for (let i = 0; i < arr.length; i++)
-      if (arr[i].length == 3) {
-        if (order[arr[i][0]][arr[i][1]] != arr[i][2]) return false;
-      } else if (order[arr[i][0]] != arr[i][1]) return false;
-    return true;
-  }
-  let result = [];
-  let arr = req.params[0].split("/");
-  for (let i = 0; i < arr.length; i++) arr[i] = arr[i].split(":");
-
-  async function getdata() {
-    await spreadsheet.ordersData(orders, customers);
-    for (let i = 0; i < orders.length; i++)
-      if (check(arr, orders[i])) result.push(orders[i]);
-    res.json(result);
-  }
-  getdata();
-  res.end;
-});
-
-
 app.get("/ordersByDay", (req, res, next) => {
   async function getdata() {
     let loc = -1;
@@ -146,7 +104,6 @@ app.get("/ordersByDay", (req, res, next) => {
   getdata();
   res.end;
 });
-
 app.get("/ordersByMonth", (req, res, next) => {
   async function getdata() {
     let loc = -1;
@@ -162,7 +119,8 @@ app.get("/ordersByMonth", (req, res, next) => {
     let result = [],
       dates = [];
     orders.forEach((order) => {
-      if (dates.indexOf(parseInt(order.date.slice(3, 5))) == -1) dates.push(parseInt(order.date.slice(3,5)));
+      if (dates.indexOf(parseInt(order.date.slice(3, 5))) == -1)
+        dates.push(parseInt(order.date.slice(3, 5)));
     });
     dates.forEach((date, index) => {
       result[index] = { days: date, count: 0, sum: 0 };
@@ -179,4 +137,7 @@ app.get("/ordersByMonth", (req, res, next) => {
   }
   getdata();
   res.end;
+});
+app.post("/filter", function (request, response) {
+  response.send(request.body); // echo the result back
 });
