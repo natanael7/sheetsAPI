@@ -50,39 +50,6 @@ app.get("/date/:date", (req, res, next) => {
   getdata();
   res.end;
 });
-app.get("/ordersByDay", (req, res, next) => {
-  async function getdata() {
-    let loc = -1;
-    function location(date, arr) {
-      arr.forEach((obj, index) => {
-        if (obj.days == date) {
-          loc = index;
-        }
-      });
-      return loc;
-    }
-    await spreadsheet.ordersData(orders, customers);
-    let result = [],
-      dates = [];
-    orders.forEach((order) => {
-      if (dates.indexOf(order.date) == -1) dates.push(order.date);
-    });
-    dates.forEach((date, index) => {
-      result[index] = { days: date, count: 0, sum: 0 };
-    });
-    orders.forEach((order) => {
-      result[location(order.date, result)].count++;
-      result[location(order.date, result)].sum += order.sum;
-    });
-    result.forEach((obj) => {
-      obj.sum = obj.sum / 100;
-      obj.average = obj.sum / obj.count * 5;
-    });
-    res.json(result);
-  }
-  getdata();
-  res.end;
-});
 app.get("/interval/:from-:to", (req, res, next) => {
   async function getdata() {
     await spreadsheet.ordersData(orders, customers);
@@ -139,6 +106,75 @@ app.get("/filter/*", (req, res, next) => {
     await spreadsheet.ordersData(orders, customers);
     for (let i = 0; i < orders.length; i++)
       if (check(arr, orders[i])) result.push(orders[i]);
+    res.json(result);
+  }
+  getdata();
+  res.end;
+});
+
+
+app.get("/ordersByDay", (req, res, next) => {
+  async function getdata() {
+    let loc = -1;
+    function location(date, arr) {
+      arr.forEach((obj, index) => {
+        if (obj.days == date) {
+          loc = index;
+        }
+      });
+      return loc;
+    }
+    await spreadsheet.ordersData(orders, customers);
+    let result = [],
+      dates = [];
+    orders.forEach((order) => {
+      if (dates.indexOf(order.date) == -1) dates.push(order.date);
+    });
+    dates.forEach((date, index) => {
+      result[index] = { days: date, count: 0, sum: 0 };
+    });
+    orders.forEach((order) => {
+      result[location(order.date, result)].count++;
+      result[location(order.date, result)].sum += order.sum;
+    });
+    result.forEach((obj) => {
+      obj.sum = obj.sum / 100;
+      obj.average = (obj.sum / obj.count) * 5;
+    });
+    res.json(result);
+  }
+  getdata();
+  res.end;
+});
+
+app.get("/ordersByMonth", (req, res, next) => {
+  async function getdata() {
+    let loc = -1;
+    function location(date, arr) {
+      arr.forEach((obj, index) => {
+        if (obj.days == parseInt(date.slice(3, 5))) {
+          loc = index;
+        }
+      });
+      return loc;
+    }
+    await spreadsheet.ordersData(orders, customers);
+    let result = [],
+      dates = [];
+    orders.forEach((order) => {
+      if (dates.indexOf(parseInt(order.date.slice(3, 5))) == -1) dates.push(parseInt(order.date.slice(3,5)));
+    });
+    dates.forEach((date, index) => {
+      result[index] = { days: date, count: 0, sum: 0 };
+    });
+    orders.forEach((order) => {
+      result[location(order.date, result)].count++;
+      result[location(order.date, result)].sum += order.sum;
+    });
+    result.forEach((obj) => {
+      obj.sum = obj.sum / 100;
+      obj.average = (obj.sum / obj.count) * 100;
+    });
     res.json(result);
   }
   getdata();
