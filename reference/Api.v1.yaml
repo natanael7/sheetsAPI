@@ -186,7 +186,7 @@ paths:
                     message: '-'
                     realSum: 253
       operationId: get-order-id
-  /show/summary:
+  '/show/summary':
     get:
       summary: Your GET endpoint
       tags: []
@@ -494,7 +494,7 @@ paths:
         '':
           description: ''
       operationId: get-show-summary-interval-from---to
-  /filter:
+  '/filter':
     post:
       summary: filter data
       tags: []

@@ -1,11 +1,10 @@
 const { GoogleSpreadsheet } = require("google-spreadsheet");
-const {Order, Customer, Product, Row, Circular} = require('./classes.js') 
+const { Order, Customer, Product, Row, Circular } = require("./classes.js");
 
 const creds = require("./client_secret.json");
 
 let rows = [];
 let products = [];
-
 
 function preventCustomerDuplicate(customers, search) {
   for (let i = 0; i < customers.length; i++)
@@ -94,13 +93,18 @@ function orderSet(orders, customers) {
       );
       tempOrder.productSet.push(tempProduct);
     }
-    if (preventOrderDuplicate(orders, tempOrder)) {
-      orders.push(tempOrder);
-      let circular = new Circular(tempOrder);
-      tempCustomer.orders.push(circular);
-      tempCustomer.ltv += tempOrder.sum;
-    }
+    orders.push(tempOrder);
+    let circular = new Circular(tempOrder);
+    tempCustomer.orders.push(circular);
   }
+  customers.forEach((customer) => {
+    let s = 0
+    customer.orders.forEach(order => { 
+      s+=order.sum
+    })
+    customer.ltv = s
+  });
+  
 }
 
 module.exports.ordersData = async function accesSpreadsheet(orders, customers) {

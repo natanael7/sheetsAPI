@@ -5,6 +5,7 @@ const { Summary } = require("./classes.js");
 
 let customers = [];
 let orders = [];
+let grabbed = false;
 function date2days(date) {
   let arr = date.split(".");
   let s = 0;
@@ -15,6 +16,7 @@ function date2days(date) {
 }
 async function getData() {
   await spreadsheet.ordersData(orders, customers);
+  grabbed = true;
   console.log("data grabbed");
 }
 
@@ -89,7 +91,10 @@ app.get("/show/summary/interval/:from-:to", (req, res, next) => {
 app.post("/filter", (req, res) => {
   function validate(order) {
     for (const property in filters)
-      if (order[property] != filters[property]) return false;
+      if (
+        order[property] != filters[property]
+      )
+        return false;
     return true;
   }
 
@@ -97,8 +102,6 @@ app.post("/filter", (req, res) => {
   let header = { show: req.body.show, filterBy: req.body.filterBy };
   delete filters.show;
   delete filters.filterBy;
-  for (const property in filters)
-    console.log(`${property}: ${filters[property]}`);
 
   let result = undefined;
 
@@ -122,7 +125,7 @@ app.post("/filter", (req, res) => {
     case "customer":
       let resultCustomers = [];
       result.forEach((order) => {
-        resultCustomers.push(order['customer']);
+        resultCustomers.push(order["customer"]);
       });
       res.send(resultCustomers);
       break;
@@ -132,7 +135,6 @@ app.post("/filter", (req, res) => {
         thisCustomers.push(order.customer);
       });
       let summ = new Summary(result, thisCustomers);
-      console.log(summ);
       res.send(summ);
       break;
     default:
@@ -224,4 +226,3 @@ app.get("/ordersByMonth", (req, res, next) => {
   getdata();
   res.end;
 });
-
